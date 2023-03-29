@@ -38,15 +38,11 @@ func main() {
 	var bigBook Book
 
 	fmt.Printf("%v: %v\n", bigBook, bigBook.Pages()) // func() int
-	fmt.Printf("%T \n", (&bigBook).SetPages)         // func(int)
-	fmt.Printf("%T \n", (&bigBook).Pages)            // func() int
+	fmt.Printf("%T \n", bigBook.Pages)               // func() int
 
-	// Call the three methods.
-	(&bigBook).SetPages(1500)
-	bigBook.SetPages(1500)          // equivalent to the last line
-	bigBook.DoNotSetPages(1700)     // equivalent to the last line
-	fmt.Println(bigBook.Pages())    // 123
-	fmt.Println((&bigBook).Pages()) // 123
+	bigBook.SetPages(1500)
+	bigBook.DoNotSetPages(1700)
+	fmt.Println(bigBook.Pages())
 
 	oldBook := Bible{Book{1500}, `old`}
 	fmt.Println(oldBook.pages)
@@ -56,5 +52,5 @@ func main() {
 
 	// exercise
 	// Make a roaring tiger, which extends a cat
-	// implement: mewing and roaring, setting age and gender
+	// implement: mewing and roaring
 }
