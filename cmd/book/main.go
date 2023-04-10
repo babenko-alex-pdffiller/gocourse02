@@ -37,8 +37,8 @@ func (b *Bible) SetPages(pages int) {
 func main() {
 	var bigBook Book
 
-	fmt.Printf("%v: %v\n", bigBook, bigBook.Pages()) // func() int
-	fmt.Printf("%T \n", bigBook.Pages)               // func() int
+	fmt.Printf("%v: %v\n", bigBook, bigBook.Pages())
+	fmt.Printf("%T \n", bigBook.Pages)
 
 	bigBook.SetPages(1500)
 	bigBook.DoNotSetPages(1700)
@@ -51,6 +51,7 @@ func main() {
 	fmt.Println(oldBook.Testament())
 
 	// exercise
-	// Make a roaring tiger, which extends a cat
+	// 1. Make a roaring tiger, which extends a cat
 	// implement: mewing and roaring
+	// 2. Make a trash bin, which have an ability to accept garbage, can be filled or empty
 }
