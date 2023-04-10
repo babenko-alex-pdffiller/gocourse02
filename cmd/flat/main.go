@@ -49,5 +49,5 @@ func main() {
 	fmt.Printf("\n%v \n\n %s\n", myAppartment, string(res))
 
 	// exercise
-	// make two couples, which have and don't have a child (Room <- *Room)
+	// make two couples, which have and don't have a child (Couple { ... *Child } )
 }
