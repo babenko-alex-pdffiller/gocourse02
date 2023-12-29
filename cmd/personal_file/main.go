@@ -2,24 +2,58 @@ package main
 
 import (
 	"fmt"
+	"time"
 )
 
 type Patient struct {
-	Name string
+	name *string
 	Id   int
-	Age  float64
+	Age  int
+}
+
+func (p *Patient) DeepCopy1() *Patient {
+	return &Patient{
+		name: p.name,
+		Age:  p.Age,
+	}
+}
+
+func (p *Patient) DeepCopy2() *Patient {
+	tmp := *p
+	return &tmp
+}
+
+// Name returns John Doe if unknown
+func (p *Patient) Name() string {
+	if p.name == nil {
+		return "John Doe"
+	} else {
+		return *p.name
+	}
+}
+
+func (p *Patient) Print() {
+	fmt.Printf("ID: %d\n", p.Id)
+	fmt.Printf("Patient Name: %s\n", p.Name())
+	fmt.Printf("Patient Age: %d\n", p.Age)
+}
+
+func NewBlankFile(t string) File {
+	return File{title: t}
 }
 
 type File struct {
-	patient Patient
-	pages   int
+	title    string
+	patient  *Patient
+	pages    int
+	birthDay *time.Time
 }
 
 func (b File) Pages() int {
 	return b.pages
 }
 
-func (b File) Patient() Patient {
+func (b File) Patient() *Patient {
 	return b.patient
 }
 
@@ -37,7 +71,7 @@ type DentistPatientFile struct {
 }
 
 func (b DentistPatientFile) FullInfo() string {
-	return fmt.Sprintf("%s with id %d has file with %d pages\n", b.patient.Name, b.patient.Id, b.Pages())
+	return fmt.Sprintf("%s with id %d has file with %d pages\n", b.patient.Name(), b.patient.Id, b.Pages())
 }
 
 func (b *DentistPatientFile) SetPages(pages int) {
@@ -46,12 +80,12 @@ func (b *DentistPatientFile) SetPages(pages int) {
 }
 
 type SurgeonPatientFile struct {
-	File
+	*File
 	SurgeriesCount int
 }
 
 func (s SurgeonPatientFile) FullInfo() string {
-	return fmt.Sprintf("%s with id %d has file with %d pages and had %d surgeries\n", s.patient.Name, s.patient.Id, s.Pages(), s.SurgeriesCount)
+	return fmt.Sprintf("%s with id %d has file with %d pages and had %d surgeries\n", s.patient.Name(), s.patient.Id, s.Pages(), s.SurgeriesCount)
 }
 
 func (s *SurgeonPatientFile) SetPages(pages int) {
@@ -61,15 +95,26 @@ func (s *SurgeonPatientFile) SetPages(pages int) {
 
 func main() {
 	// Створення екземпляра Patient
+	pName := "Ernest H"
 	patient := Patient{
-		Name: "John Doe",
+		name: &pName,
 		Id:   123,
 		Age:  30,
 	}
 
+	// копіювання структури
+	//copyForPatient := patient.DeepCopy1()
+	copyForPatient := patient.DeepCopy2()
+	copyForPatient.Id = 124
+	copyForPatient.Age = 33
+	patient.Print()
+	copyForPatient.Print()
+	fmt.Println()
+
 	// Створення екземпляра File
-	file := File{
-		patient: patient,
+	file := NewBlankFile(`caries`)
+	file = File{
+		patient: &patient,
 		pages:   5,
 	}
 
@@ -99,16 +144,13 @@ func main() {
 	fmt.Printf("After calling SetPages on DentistPatientFile: File pages: %d\n", dentistPatientFile.Pages())
 
 	surgeonPatientFile := SurgeonPatientFile{
-		File:           file,
+		File:           &file,
 		SurgeriesCount: 2,
 	}
 
 	// Виклик методів FullInfo поліморфно
 	printFullInfo(&dentistPatientFile)
 	printFullInfo(&surgeonPatientFile)
-
-	// exercise
-	// ????
 }
 
 // Функція для демонстрації поліморфізму

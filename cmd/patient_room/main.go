@@ -62,13 +62,7 @@ func main() {
 			Type: Table,
 		},
 	}
-
-	bed := HospitalProperty{
-		Name:  Bed.Name(),
-		Type:  Bed,
-		color: blueColor,
-	}
-
+	bed := HospitalProperty{Bed.Name(), Bed, blueColor, nil}
 	window := HospitalProperty{
 		Name:  Window.Name(),
 		Type:  Window,
@@ -84,9 +78,6 @@ func main() {
 
 	// Демонстрація серіалізації в JSON та вивід результатів
 	printMarshalled(acc1)
-
-	// exercise
-	// ????
 }
 
 func printMarshalled(a Accounting) {
