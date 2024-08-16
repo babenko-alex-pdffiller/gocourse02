@@ -9,7 +9,7 @@ type ZooKeeper struct {
 	Name string
 }
 
-func (keper *ZooKeeper) SendToCage(animal *Animal, cage *Cage) {
+func (keper *ZooKeeper) PutToCage(animal *Animal, cage *Cage) {
 	cage.Animal = animal
 	animal.IsFree = false
 }
@@ -19,7 +19,7 @@ type Animal struct {
 	IsFree bool
 }
 
-func (a *Animal) makeFree() {
+func (a *Animal) runAway() {
 	a.IsFree = true
 }
 
@@ -50,7 +50,7 @@ func (cage *Cage) open() {
 }
 
 func main() {
-	animalsNames := [4]AnimalType{Lion, Tiger, Duck, Monkey}
+	animalNames := [4]AnimalType{Lion, Tiger, Duck, Monkey}
 	animalsAmount := rand.IntN(10)
 
 	var animals []Animal
@@ -62,7 +62,7 @@ func main() {
 
 	// Create animals and cages
 	for i := 0; i <= animalsAmount; i++ {
-		name := animalsNames[rand.IntN(4)]
+		name := animalNames[rand.IntN(4)]
 		animal := Animal{name, false}
 		animals = append(animals, animal)
 		fmt.Printf("%s in cage\n", animals[i].Name)
@@ -72,9 +72,9 @@ func main() {
 	// Opening cells randomly
 	for i, _ := range zoo.Cages {
 		isOpen := rand.IntN(2) == 0
-		if isOpen == true {
+		if isOpen {
 			zoo.Cages[i].open()
-			animals[i].IsFree = true
+			animals[i].runAway()
 			fmt.Printf("Cage #%d is open, %s is free\n", i, animals[i].Name)
 		}
 	}
@@ -86,7 +86,7 @@ func main() {
 			for a := 0; a <= animalsAmount; a++ {
 				if animals[a].IsFree == true {
 					fmt.Printf("Keper sent %s to cage\n", animals[a].Name)
-					zooKeper.SendToCage(&animals[a], &zoo.Cages[i])
+					zooKeper.PutToCage(&animals[a], &zoo.Cages[i])
 					break
 				}
 			}
